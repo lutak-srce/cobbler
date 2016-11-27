@@ -154,9 +154,26 @@ class cobbler (
     group  => root,
     mode   => '0644',
   }
-  file { "${::cobbler::params::proxy_config_prefix}/proxy_cobbler.conf":
-    content => template('cobbler/proxy_cobbler.conf.erb'),
-    notify  => Service['httpd'],
+  case $::osfamily {
+    'RedHat' : {
+      case $::operatingsystemmajrelease {
+        '7'     : { 
+          file { "${::cobbler::params::proxy_config_prefix}/proxy_cobbler.conf":
+            content => template('cobbler/proxy_cobbler_7.conf.erb'),
+            notify  => Service['httpd'],
+          }
+        }
+        default : { 
+          file { "${::cobbler::params::proxy_config_prefix}/proxy_cobbler.conf":
+            content => template('cobbler/proxy_cobbler.conf.erb'),
+            notify  => Service['httpd'],
+          }
+        }
+      }
+    }
+    default: {
+      fail('The cobbler module is not supported on this OS.')
+    }
   }
   file { $distro_path :
     ensure => directory,

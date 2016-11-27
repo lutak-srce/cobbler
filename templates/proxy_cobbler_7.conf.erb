@@ -1,0 +1,8 @@
+#
+# Proxy Server directives for proxying cobbler.
+#
+<IfModule mod_proxy.c>
+  <Proxy http://localhost:25151/ >
+    Require ip <%= @allow_access %>
+  </Proxy>
+</IfModule>
