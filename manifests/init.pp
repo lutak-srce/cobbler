@@ -114,6 +114,7 @@ class cobbler (
   $dhcp_subnets       = $::cobbler::params::dhcp_subnets,
   $defaultrootpw      = $::cobbler::params::defaultrootpw,
   $apache_service     = $::cobbler::params::apache_service,
+  $file_proxy_cobbler_erb = $::cobbler::params::file_proxy_cobbler_erb,
   $allow_access       = $::cobbler::params::allow_access,
   $purge_distro       = false,
   $purge_repo         = false,
@@ -155,7 +156,7 @@ class cobbler (
     mode   => '0644',
   }
   file { "${::cobbler::params::proxy_config_prefix}/proxy_cobbler.conf":
-    content => template('cobbler/proxy_cobbler.conf.erb'),
+    content => template($file_proxy_cobbler_erb),
     notify  => Service['httpd'],
   }
   file { $distro_path :

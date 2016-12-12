@@ -5,19 +5,20 @@
 class cobbler::params {
   case $::osfamily {
     'RedHat': {
-      $service_name       = 'cobblerd'
-      $package_name        = 'cobbler'
-      $package_name_web    = 'cobbler-web'
-      $tftp_package        = 'tftp-server'
-      $syslinux_package    = 'syslinux'
-      $dhcp_package        = 'dhcp'
-      $dhcp_version        = 'present'
-      $dhcp_service        = 'dhcpd'
-      $http_config_prefix  = '/etc/httpd/conf.d'
-      $proxy_config_prefix = '/etc/httpd/conf.d'
-      $distro_path         = '/distro'
-      $apache_service      = 'httpd'
-      $default_kickstart   = '/var/lib/cobbler/kickstarts/default.ks'
+      $service_name           = 'cobblerd'
+      $package_name           = 'cobbler'
+      $package_name_web       = 'cobbler-web'
+      $tftp_package           = 'tftp-server'
+      $syslinux_package       = 'syslinux'
+      $dhcp_package           = 'dhcp'
+      $dhcp_version           = 'present'
+      $dhcp_service           = 'dhcpd'
+      $http_config_prefix     = '/etc/httpd/conf.d'
+      $proxy_config_prefix    = '/etc/httpd/conf.d'
+      $distro_path            = '/distro'
+      $apache_service         = 'httpd'
+      $file_proxy_cobbler_erb = "cobbler/proxy_cobbler.el${::operatingsystemmajrelease}.conf.erb"
+      $default_kickstart      = '/var/lib/cobbler/kickstarts/default.ks'
     }
     'Debian': {
       $service_name        = 'cobbler'
