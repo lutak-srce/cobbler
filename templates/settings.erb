@@ -211,7 +211,7 @@ puppet_auto_setup: <%= @puppet_auto_setup %>
 sign_puppet_certs_automatically: <%= @sign_puppet_certs %>
 
 # location of the puppet executable, used for revoking certificates
-puppetca_path: "/usr/bin/puppet"
+puppetca_path: "<%= @puppetca_path %>"
 
 # when a puppet managed machine is reinstalled it is necessary to
 # remove the puppet certificate from the puppet master server before a

@@ -10,6 +10,7 @@ class cobbler (
   $next_server_ip          = $::ipaddress,
   $nameservers             = [ '8.8.8.8', '8.8.4.4' ],
   $puppet_auto_setup       = 0,
+  $puppetca_path           = '/opt/puppetlabs/bin/puppet',
   $sign_puppet_certs       = 0,
   $remove_old_puppet_certs = 0,
   $manage_dhcp             = '1',
