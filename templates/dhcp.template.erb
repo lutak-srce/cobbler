@@ -18,12 +18,11 @@ allow bootp;
 ignore client-updates;
 set vendorclass = option vendor-class-identifier;
 
-<% unless @dhcp_interfaces == '' or @dhcp_interfaces.nil? -%>
-<% @dhcp_interfaces.each do |iface| -%>
+<% unless @interfaces == '' or @interfaces.nil? -%>
+<% @interfaces.each do |iface| -%>
 subnet <%= instance_variable_get("@network_#{iface}") %> netmask <%= instance_variable_get("@netmask_#{iface}") %> {
     option domain-name          "<%= @domain %>";
-    option subnet-mask          255.255.255.0;
-#    option subnet-mask          <%= instance_variable_get("@netmask_#{iface}") %>;
+    option subnet-mask          <%= instance_variable_get("@netmask_#{iface}") %>;
     option domain-name-servers  <%=
 if @nameservers.kind_of?(Array)
    @nameservers.join(", ")
@@ -33,16 +32,18 @@ else
    puts("127.0.0.1")
 end %>;
     option routers              <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.1;
-    filename                    "/pxelinux.0";<% if @dhcp_dynamic_range == 1 then %>
-    range dynamic-bootp         <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.100 <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.200;<% end %>
+    filename                    "/pxelinux.0";
+<% if @dynamic_range == '1' then -%>
+    range dynamic-bootp         <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.100 <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.200;
+<% end -%>
     default-lease-time          21600;
     max-lease-time              43200;
     next-server                 $next_server;
 }
 <% end -%>
 <% end -%>
-<% unless @dhcp_subnets == '' or @dhcp_subnets.nil? -%>
-<% @dhcp_subnets.each do |dhcp_subnet| -%>
+<% unless @subnets == '' or @subnets.nil? -%>
+<% @subnets.each do |dhcp_subnet| -%>
 <% dhcp_subnet_split   = dhcp_subnet.split('/') -%>
 subnet <%= dhcp_subnet_split[0] %> netmask <%= dhcp_subnet_split[1] %> {
     option domain-name          "<%= @domain %>";

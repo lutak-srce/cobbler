@@ -3,6 +3,12 @@
 #
 <IfModule mod_proxy.c>
   <Proxy http://localhost:25151/ >
+<%- if @apache_version.to_f >= 2.4 -%>
     Require ip <%= @allow_access %>
+<%- else -%>
+    Order deny,allow
+    Deny from all
+    Allow from <%= @allow_access %>
+<%- end -%>
   </Proxy>
 </IfModule>

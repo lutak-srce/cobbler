@@ -2,27 +2,18 @@
 # = Class: cobbler::dhcp
 #
 # This module manages ISC DHCP for Cobbler
-# https://fedorahosted.org/cobbler/
 #
 class cobbler::dhcp (
-  $package         = $::cobbler::params::dhcp_package,
-  $version         = $::cobbler::params::dhcp_version,
-  $service         = $::cobbler::params::dhcp_service,
-  $nameservers     = $::cobbler::params::nameservers,
-  $interfaces      = $::cobbler::params::dhcp_interfaces,
+  $package         = undef,
+  $service         = undef,
+  $nameservers     = undef,
+  $interfaces      = undef,
   $subnets         = undef,
-  $dynamic_range   = $::cobbler::params::dhcp_dynamic_range,
+  $dynamic_range   = false,
 ) inherits cobbler::params {
   include ::cobbler
 
-  $dhcp_interfaces    = $interfaces
-  $dhcp_subnets       = $subnets
-  $dhcp_dynamic_range = $dynamic_range
-
-  package { 'dhcp':
-    ensure => present,
-    name   => $package,
-  }
+  package { 'dhcp': name => $package, }
 
   service { 'dhcpd':
     ensure  => running,

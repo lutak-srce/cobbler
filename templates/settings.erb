@@ -208,7 +208,7 @@ puppet_auto_setup: <%= @puppet_auto_setup %>
 # certificate after installation if the puppet master server is
 # running on the same machine as cobbler. This requires
 # puppet_auto_setup above to be enabled
-sign_puppet_certs_automatically: <%= @sign_puppet_certs_automatically %>
+sign_puppet_certs_automatically: <%= @sign_puppet_certs %>
 
 # location of the puppet executable, used for revoking certificates
 puppetca_path: "/usr/bin/puppet"
@@ -220,7 +220,7 @@ puppetca_path: "/usr/bin/puppet"
 # installed is removed from the puppet master server if the puppet
 # master server is running on the same machine as cobbler. This
 # requires puppet_auto_setup above to be enabled
-remove_old_puppet_certs_automatically: <%= @sign_puppet_certs_automatically %>
+remove_old_puppet_certs_automatically: <%= @remove_old_puppet_certs %>
 
 # choose a --server argument when running puppetd/puppet agent during kickstart
 #puppet_server: 'puppet'
