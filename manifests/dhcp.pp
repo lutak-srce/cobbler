@@ -6,7 +6,7 @@
 class cobbler::dhcp (
   $package         = undef,
   $service         = undef,
-  $tmpl_dhcp_conf  = 'cobbler/dhcp.template.erb',
+  $dhcp_template   = undef,
   $nameservers     = undef,
   $interfaces      = undef,
   $subnets         = undef,
@@ -32,7 +32,7 @@ class cobbler::dhcp (
     group   => root,
     mode    => '0644',
     require => Package['cobbler'],
-    content => template($tmpl_dhcp_conf),
+    content => template($dhcp_template),
     notify  => Exec['cobblersync'],
   }
 
