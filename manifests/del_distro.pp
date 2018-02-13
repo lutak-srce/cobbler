@@ -2,7 +2,9 @@
 # = Define: cobbler::del_distro
 #
 # Deletes cobblerdistro and it's kickstart
-define cobbler::del_distro (){
+define cobbler::del_distro (
+  $kickstarts_path = '/var/lib/cobbler/kickstarts'
+){
   include ::cobbler
 
   $distro = $title
@@ -11,7 +13,7 @@ define cobbler::del_distro (){
     destdir => $cobbler::distro_path,
     require => [ Service['cobbler'], Service['httpd'] ],
   }
-  file { "${cobbler::distro_path}/kickstarts/${distro}.ks":
+  file { "${kickstarts_path}/${distro}.ks":
     ensure  => absent,
   }
 }

@@ -37,6 +37,7 @@ class cobbler (
   $purge_profile           = false,
   $purge_system            = false,
   $default_kickstart       = $::cobbler::params::default_kickstart,
+  $kickstarts_path         = '/var/lib/cobbler/kickstarts',
   $webroot                 = '/var/www/cobbler',
   $auth_module             = 'authn_denyall',
   $create_resources        = false,
@@ -68,7 +69,7 @@ class cobbler (
     ensure  => running,
     name    => $service_name,
     enable  => true,
-    require => [ Package['cobbler'], File["${distro_path}/kickstarts"] ],
+    require => Package['cobbler'],
     noop    => $noops,
   }
 
@@ -91,8 +92,9 @@ class cobbler (
     mode   => '0755',
   }
 
-  file { "${distro_path}/kickstarts" :
+  file { '/var/lib/cobbler/kickstarts':
     ensure => directory,
+    path   => $kickstarts_path,
     mode   => '0755',
   }
 
