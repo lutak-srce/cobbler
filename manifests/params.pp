@@ -38,4 +38,11 @@ class cobbler::params {
     }
   }
 
+  # dhcp options
+  $manage_dhcp        = 0
+  $dhcp_option        = 'isc'
+  $dhcp_interfaces    = 'eth0'
+  $dhcp_subnets       = ''
+  $dhcp_dynamic_range = 0
+
 }

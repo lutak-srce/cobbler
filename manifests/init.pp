@@ -13,15 +13,11 @@ class cobbler (
   $puppetca_path           = '/opt/puppetlabs/bin/puppet',
   $sign_puppet_certs       = 0,
   $remove_old_puppet_certs = 0,
-  $manage_dhcp             = '1',
-  $dhcp_option             = 'isc',
-  $dhcp_package            = $::cobbler::params::dhcp_package,
-  $dhcp_service            = $::cobbler::params::dhcp_service,
-  $dhcp_template           = 'cobbler/dhcp.template.erb',
-  $dhcp_interfaces         = [ 'eth0' ],
-  $dhcp_subnets            = [],
-  $dhcp_nameservers        = [ '8.8.8.8', '8.8.4.4' ],
-  $dhcp_dynamic_range      = false,
+  $manage_dhcp             = $::cobbler::params::manage_dhcp,
+  $dhcp_option             = $::cobbler::params::dhcp_option,
+  $dhcp_interfaces         = $::cobbler::params::dhcp_interfaces,
+  $dhcp_subnets            = $::cobbler::params::dhcp_subnets,
+  $dhcp_dynamic_range      = $::cobbler::params::dhcp_dynamic_range,
   $manage_dns              = '0',
   $dns_option              = 'dnsmasq',
   $manage_tftpd            = '1',
@@ -151,16 +147,8 @@ class cobbler (
   }
 
   # include ISC DHCP only if we choose manage_dhcp
-  if ( $manage_dhcp == '1' ) and ( $dhcp_option == 'isc' ) {
-    class { '::cobbler::dhcp':
-      package        => $dhcp_package,
-      service        => $dhcp_service,
-      dhcp_template  => $dhcp_template,
-      nameservers    => $dhcp_nameservers,
-      interfaces     => $dhcp_interfaces,
-      subnets        => $dhcp_subnets,
-      dynamic_range  => $dhcp_dynamic_range,
-    }
+  if $manage_dhcp == '1' {
+    include ::cobbler::dhcp
   }
 
   # logrotate script
