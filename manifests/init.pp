@@ -37,7 +37,6 @@ class cobbler (
   $purge_profile           = false,
   $purge_system            = false,
   $default_kickstart       = $::cobbler::params::default_kickstart,
-  $kickstarts_path         = '/var/lib/cobbler/kickstarts',
   $webroot                 = '/var/www/cobbler',
   $auth_module             = 'authn_denyall',
   $create_resources        = false,
@@ -62,7 +61,7 @@ class cobbler (
 
   package { 'cobbler':
     name    => $package_name,
-    require => Package['tftp-server','syslinux'],
+    require => [ Package['tftp-server','syslinux'], File["${distro_path}/kickstarts"] ],
   }
 
   service { 'cobbler':
@@ -91,10 +90,8 @@ class cobbler (
     ensure => directory,
     mode   => '0755',
   }
-
-  file { '/var/lib/cobbler/kickstarts':
+  file { "${distro_path}/kickstarts" :
     ensure => directory,
-    path   => $kickstarts_path,
     mode   => '0755',
   }
 

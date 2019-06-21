@@ -1,10 +1,5 @@
 # Define: cobbler::import_distro
-define cobbler::import_distro (
-  $kickstarts_path = '/var/lib/cobbler/kickstarts',
-  $arch,
-  $path,
-  $available_as
-) {
+define cobbler::import_distro ($arch,$path,$available_as) {
   include cobbler
   $distro = $title
   $server_ip = $::cobbler::server_ip
@@ -16,9 +11,9 @@ define cobbler::import_distro (
     require => [ Service['cobbler'], Service['httpd'] ],
   }
   $defaultrootpw = $::cobbler::defaultrootpw
-  file { "${kickstarts_path}/${distro}.ks":
+  file { "${::cobbler::distro_path}/kickstarts/${distro}.ks":
     ensure  => present,
     content => template("cobbler/${distro}.ks.erb"),
-    require => File[$kickstarts_path],
+    require => File["${::cobbler::distro_path}/kickstarts"],
   }
 }

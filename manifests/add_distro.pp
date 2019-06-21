@@ -8,7 +8,6 @@ define cobbler::add_distro (
   $kernel            = 'images/pxeboot/vmlinuz',
   $initrd            = 'images/pxeboot/initrd.img',
   $ks_template       = "cobbler/${title}.ks.erb",
-  $kickstarts_path   = '/var/lib/cobbler/kickstarts',
   $include_kickstart = true,
 ) {
   include ::cobbler
@@ -26,10 +25,10 @@ define cobbler::add_distro (
   }
   $defaultrootpw = $::cobbler::defaultrootpw
   if ($include_kickstart) {
-    file { "${kickstarts_path}/${distro}.ks":
+    file { "${::cobbler::distro_path}/kickstarts/${distro}.ks":
       ensure  => present,
       content => template($ks_template),
-      require => File[$kickstarts_path],
+      require => File["${::cobbler::distro_path}/kickstarts"],
     }
   }
 }
