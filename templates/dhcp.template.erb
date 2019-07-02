@@ -18,6 +18,8 @@ allow bootp;
 ignore client-updates;
 set vendorclass = option vendor-class-identifier;
 
+option pxe-system-type code 93 = unsigned integer 16;
+
 <% unless @interfaces == '' or @interfaces.nil? -%>
 <% @interfaces.each do |iface| -%>
 subnet <%= instance_variable_get("@network_#{iface}") %> netmask <%= instance_variable_get("@netmask_#{iface}") %> {
@@ -75,20 +77,34 @@ group {
         #for mac in $dhcp_tags[$dhcp_tag].keys():
             #set iface = $dhcp_tags[$dhcp_tag][$mac]
     host $iface.name {
+        #if $iface.interface_type == "infiniband":
+        option dhcp-client-identifier = $mac;
+        #else
         hardware ethernet $mac;
+        #end if
         #if $iface.ip_address:
         fixed-address $iface.ip_address;
         #end if
         #if $iface.hostname:
         option host-name "$iface.hostname";
         #end if
-        #if $iface.subnet:
-        option subnet-mask $iface.subnet;
+        #if $iface.netmask:
+        option subnet-mask $iface.netmask;
         #end if
         #if $iface.gateway:
         option routers $iface.gateway;
         #end if
+        #if $iface.enable_gpxe:
+        if exists user-class and option user-class = "gPXE" {
+            filename "http://$cobbler_server/cblr/svc/op/gpxe/system/$iface.owner";
+        } else if exists user-class and option user-class = "iPXE" {
+            filename "http://$cobbler_server/cblr/svc/op/gpxe/system/$iface.owner";
+        } else {
+            filename "undionly.kpxe";
+        }
+        #else
         filename "$iface.filename";
+        #end if
         ## Cobbler defaults to $next_server, but some users
         ## may like to use $iface.system.server for proxied setups
         next-server $next_server;
