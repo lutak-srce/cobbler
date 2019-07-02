@@ -1,9 +1,9 @@
 # Define: cobbler::import_distro
 define cobbler::import_distro (
-  $kickstarts_path = '/var/lib/cobbler/kickstarts',
   $arch,
   $path,
-  $available_as
+  $available_as,
+  $kickstarts_path = '/var/lib/cobbler/kickstarts',
 ) {
   include cobbler
   $distro = $title

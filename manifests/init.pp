@@ -153,13 +153,13 @@ class cobbler (
   # include ISC DHCP only if we choose manage_dhcp
   if ( $manage_dhcp == '1' ) and ( $dhcp_option == 'isc' ) {
     class { '::cobbler::dhcp':
-      package        => $dhcp_package,
-      service        => $dhcp_service,
-      dhcp_template  => $dhcp_template,
-      nameservers    => $dhcp_nameservers,
-      interfaces     => $dhcp_interfaces,
-      subnets        => $dhcp_subnets,
-      dynamic_range  => $dhcp_dynamic_range,
+      package       => $dhcp_package,
+      service       => $dhcp_service,
+      dhcp_template => $dhcp_template,
+      nameservers   => $dhcp_nameservers,
+      interfaces    => $dhcp_interfaces,
+      subnets       => $dhcp_subnets,
+      dynamic_range => $dhcp_dynamic_range,
     }
   }
 
