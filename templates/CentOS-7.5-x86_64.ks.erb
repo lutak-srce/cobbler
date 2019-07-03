@@ -60,7 +60,23 @@ $SNIPPET('pre_anamon')
 #
 %packages
 
-@base
+@core
+net-tools
+xfsprogs
+-firewalld
+-firewalld-filesystem
+-alsa-firmware
+-alsa-tools-firmware
+-iwl*firmware
+-ivtv-firmware
+-aic49xx-firmware
+-crystalhd-firmware
+-plymouth*
+-wpa_supplicant
+-NetworkManager
+-NetworkManager-team
+-NetworkManager-tui
+-NetworkManager-wifi
 
 # Puppet
 $SNIPPET('puppet_install_if_enabled')

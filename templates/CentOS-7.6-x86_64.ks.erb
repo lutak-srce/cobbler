@@ -108,6 +108,10 @@ $SNIPPET('download_config_files')
 # SSH
 mkdir -m 700 /root/.ssh
 
+# disable services
+for i in atd auditd haldaemon iptables ip6tables iscsi iscsid lvm2-monitor mdmonitor messagebus; do chkconfig $i off; done || true
+for i in fcoe lldpad nfslock rpcbind rpcgssd rpcidmapd abrt-ccpp abrt-oops abrtd kdump; do chkconfig $i off; done || true
+
 # setup network
 sed -i 's/NETWORKING_IPV6=yes/NETWORKING_IPV6=no/' /etc/sysconfig/network
 echo "IPV6INIT=no" >> /etc/sysconfig/network
