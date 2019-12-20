@@ -44,6 +44,7 @@ class cobbler (
   $dependency_class        = '::cobbler::dependency',
   $my_class                = undef,
   $noops                   = undef,
+  $client_use_https        = '0'
 ) inherits cobbler::params {
 
   # include dependencies
