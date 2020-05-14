@@ -165,7 +165,7 @@ class cobbler (
   }
 
   # logrotate script
-  file { '/etc/logrotate.d/cobbler':
+  file { '/etc/logrotate.d/cobblerd':
     source => 'puppet:///modules/cobbler/logrotate',
   }
 }

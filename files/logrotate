@@ -1,9 +1,26 @@
 /var/log/cobbler/cobbler.log {
-    rotate 5
-    missingok
-    notifempty
-    size=+30k
-    compress
-    copytruncate
-    monthly
+   missingok
+   notifempty
+   rotate 4
+   weekly
+   postrotate
+      /sbin/service cobblerd condrestart > /dev/null 2>&1
+   endscript
+}
+
+/var/log/cobbler/tasks/*.log {
+   weekly
+   rotate 0
+   missingok
+   ifempty
+   nocompress
+   nocreate
+   nomail
+}
+
+/var/log/cobbler/install.log {
+   missingok
+   notifempty
+   rotate 4
+   weekly
 }
