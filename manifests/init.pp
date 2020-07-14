@@ -14,7 +14,7 @@ class cobbler (
   $sign_puppet_certs       = 0,
   $remove_old_puppet_certs = 0,
   $manage_dhcp             = '1',
-  $dhcp_option             = 'isc',
+  $dhcp_option             = 'manage_isc',
   $dhcp_package            = $::cobbler::params::dhcp_package,
   $dhcp_service            = $::cobbler::params::dhcp_service,
   $dhcp_template           = 'cobbler/dhcp.template.erb',
@@ -23,10 +23,10 @@ class cobbler (
   $dhcp_nameservers        = [ '8.8.8.8', '8.8.4.4' ],
   $dhcp_dynamic_range      = false,
   $manage_dns              = '0',
-  $dns_option              = 'dnsmasq',
+  $dns_option              = 'manage_dnsmasq',
   $manage_tftpd            = '1',
   $tftpd_package           = $::cobbler::params::tftpd_package,
-  $tftpd_option            = 'in_tftpd',
+  $tftpd_option            = 'manage_in_tftpd',
   $syslinux_package        = $::cobbler::params::syslinux_package,
   $defaultrootpw           = 'bettergenerateityourself',
   $apache_service          = $::cobbler::params::apache_service,
@@ -40,11 +40,13 @@ class cobbler (
   $kickstarts_path         = '/var/lib/cobbler/kickstarts',
   $webroot                 = '/var/www/cobbler',
   $auth_module             = 'authn_denyall',
+  $hash_algorithm          = undef,
   $create_resources        = false,
   $dependency_class        = '::cobbler::dependency',
   $my_class                = undef,
   $noops                   = undef,
-  $client_use_https        = '0'
+  $client_use_https        = '0',
+  $authorization_module    = 'authz_allowall'
 ) inherits cobbler::params {
 
   # include dependencies
