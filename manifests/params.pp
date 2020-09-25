@@ -17,11 +17,13 @@ class cobbler::params {
       $distro_path            = '/distro'
       $apache_service         = 'httpd'
       if (versioncmp($cobbler_version,'3.0.0')>=0) {
-        $default_kickstart      = 'default.ks'
+        $default_kickstart      = '/var/lib/cobbler/templates/default.ks'
         $kickstarts_path        = '/var/lib/cobbler/templates'
+        $settings_template      = 'cobbler/settings.v3.erb'
       } else {
         $default_kickstart      = '/var/lib/cobbler/kickstarts/default.ks'
         $kickstarts_path        = '/var/lib/cobbler/kickstarts'
+        $settings_template      = 'cobbler/settings.erb'
       }
     }
     'Debian': {
@@ -38,11 +40,13 @@ class cobbler::params {
       $distro_path         = '/var/www/cobbler/ks_mirror'
       $apache_service      = 'apache2'
       if (versioncmp($cobbler_version,'3.0.0')>=0) {
-        $default_kickstart   = 'ubuntu-server.preseed'
+        $default_kickstart   = '/var/lib/cobbler/templates/ubuntu-server.preseed'
         $kickstarts_path     = '/var/lib/cobbler/templates'
+        $settings_template   = 'cobbler/settings.v3.erb'
       } else {
         $default_kickstart   = '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'
         $kickstarts_path     = '/var/lib/cobbler/kickstarts'
+        $settings_template   = 'cobbler/settings.erb'
       }
     }
     default: {

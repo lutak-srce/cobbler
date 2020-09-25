@@ -47,7 +47,7 @@ class cobbler (
   $noops                   = undef,
   $client_use_https        = '0',
   $authorization_module    = 'authz_allowall',
-  $settings_template       = 'cobbler/settings.erb',
+  $settings_template       = $::cobbler::params::settings_template,
 ) inherits cobbler::params {
 
   # include dependencies
