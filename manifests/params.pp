@@ -16,7 +16,13 @@ class cobbler::params {
       $proxy_config_prefix    = '/etc/httpd/conf.d'
       $distro_path            = '/distro'
       $apache_service         = 'httpd'
-      $default_kickstart      = '/var/lib/cobbler/kickstarts/default.ks'
+      if (versioncmp($cobbler_version,'3.0.0')>=0) {
+        $default_kickstart      = 'default.ks'
+        $kickstarts_path        = '/var/lib/cobbler/templates'
+      } else {
+        $default_kickstart      = '/var/lib/cobbler/kickstarts/default.ks'
+        $kickstarts_path        = '/var/lib/cobbler/kickstarts'
+      }
     }
     'Debian': {
       $service_name        = 'cobbler'
@@ -31,7 +37,13 @@ class cobbler::params {
       $proxy_config_prefix = '/etc/apache2/conf.d'
       $distro_path         = '/var/www/cobbler/ks_mirror'
       $apache_service      = 'apache2'
-      $default_kickstart   = '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'
+      if (versioncmp($cobbler_version,'3.0.0')>=0) {
+        $default_kickstart   = 'ubuntu-server.preseed'
+        $kickstarts_path     = '/var/lib/cobbler/templates'
+      } else {
+        $default_kickstart   = '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'
+        $kickstarts_path     = '/var/lib/cobbler/kickstarts'
+      }
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat")

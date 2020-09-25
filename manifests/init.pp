@@ -37,7 +37,7 @@ class cobbler (
   $purge_profile           = false,
   $purge_system            = false,
   $default_kickstart       = $::cobbler::params::default_kickstart,
-  $kickstarts_path         = '/var/lib/cobbler/kickstarts',
+  $kickstarts_path         = $::cobbler::params::kickstarts_path,
   $webroot                 = '/var/www/cobbler',
   $auth_module             = 'authn_denyall',
   $hash_algorithm          = undef,
@@ -46,7 +46,8 @@ class cobbler (
   $my_class                = undef,
   $noops                   = undef,
   $client_use_https        = '0',
-  $authorization_module    = 'authz_allowall'
+  $authorization_module    = 'authz_allowall',
+  $settings_template       = 'cobbler/settings.erb',
 ) inherits cobbler::params {
 
   # include dependencies
@@ -102,7 +103,7 @@ class cobbler (
   }
 
   file { '/etc/cobbler/settings':
-    content => template('cobbler/settings.erb'),
+    content => template($settings_template),
     require => Package['cobbler'],
     notify  => Service['cobbler'],
   }
