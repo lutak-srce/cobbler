@@ -17,7 +17,7 @@ class cobbler (
   $dhcp_option             = 'manage_isc',
   $dhcp_package            = $::cobbler::params::dhcp_package,
   $dhcp_service            = $::cobbler::params::dhcp_service,
-  $dhcp_template           = 'cobbler/dhcp.template.erb',
+  $dhcp_template           = $::cobbler::params::dhcp_template,
   $dhcp_interfaces         = [ 'eth0' ],
   $dhcp_subnets            = [],
   $dhcp_nameservers        = [ '8.8.8.8', '8.8.4.4' ],

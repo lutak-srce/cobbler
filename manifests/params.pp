@@ -20,10 +20,12 @@ class cobbler::params {
         $default_kickstart      = '/var/lib/cobbler/templates/default.ks'
         $kickstarts_path        = '/var/lib/cobbler/templates'
         $settings_template      = 'cobbler/settings.v3.erb'
+        $dhcp_template          = 'cobbler/dhcp.template.v3.erb'
       } else {
         $default_kickstart      = '/var/lib/cobbler/kickstarts/default.ks'
         $kickstarts_path        = '/var/lib/cobbler/kickstarts'
         $settings_template      = 'cobbler/settings.erb'
+        $dhcp_template          = 'cobbler/dhcp.template.erb'
       }
     }
     'Debian': {
@@ -43,10 +45,12 @@ class cobbler::params {
         $default_kickstart   = '/var/lib/cobbler/templates/ubuntu-server.preseed'
         $kickstarts_path     = '/var/lib/cobbler/templates'
         $settings_template   = 'cobbler/settings.v3.erb'
+        $dhcp_template       = 'cobbler/dhcp.template.v3.erb'
       } else {
         $default_kickstart   = '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'
         $kickstarts_path     = '/var/lib/cobbler/kickstarts'
         $settings_template   = 'cobbler/settings.erb'
+        $dhcp_template       = 'cobbler/dhcp.template.erb'
       }
     }
     default: {
