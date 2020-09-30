@@ -16,6 +16,11 @@ class cobbler::params {
       $proxy_config_prefix    = '/etc/httpd/conf.d'
       $distro_path            = '/distro'
       $apache_service         = 'httpd'
+      if (versioncmp($puppetversion,'6.0.0')>=0) {
+        $puppetca_path           = '/opt/puppetlabs/bin/puppetserver'
+      } else {
+        $puppetca_path           = '/opt/puppetlabs/bin/puppet'
+      }
       if (versioncmp($cobbler_version,'3.0.0')>=0) {
         $default_kickstart    = '/var/lib/cobbler/templates/default.ks'
         $kickstarts_path      = '/var/lib/cobbler/templates'
@@ -43,6 +48,11 @@ class cobbler::params {
       $proxy_config_prefix = '/etc/apache2/conf.d'
       $distro_path         = '/var/www/cobbler/ks_mirror'
       $apache_service      = 'apache2'
+      if (versioncmp($puppetversion,'6.0.0')>=0) {
+        $puppetca_path           = '/opt/puppetlabs/bin/puppetserver'
+      } else {
+        $puppetca_path           = '/opt/puppetlabs/bin/puppet'
+      }
       if (versioncmp($cobbler_version,'3.0.0')>=0) {
         $default_kickstart    = '/var/lib/cobbler/templates/ubuntu-server.preseed'
         $kickstarts_path      = '/var/lib/cobbler/templates'
