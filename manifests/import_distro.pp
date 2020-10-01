@@ -3,16 +3,20 @@ define cobbler::import_distro (
   $arch,
   $path,
   $available_as,
+  $breed,
+  $os_version,
 ) {
   include cobbler
   $distro = $title
   $server_ip = $::cobbler::server_ip
   cobblerdistro { $distro :
-    ensure  => present,
-    arch    => $arch,
-    path    => $path,
-    ks_meta => { tree => $available_as },
-    require => [ Service['cobbler'], Service['httpd'] ],
+    ensure     => present,
+    arch       => $arch,
+    path       => $path,
+    breed      => $breed,
+    os_version => $os_version,
+    ks_meta    => { tree => $available_as },
+    require    => [ Service['cobbler'], Service['httpd'] ],
   }
   $defaultrootpw = $::cobbler::defaultrootpw
   $kickstarts_path = $::cobbler::kickstarts_path

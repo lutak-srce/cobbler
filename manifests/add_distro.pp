@@ -9,19 +9,23 @@ define cobbler::add_distro (
   $initrd            = 'images/pxeboot/initrd.img',
   $ks_template       = "cobbler/${title}.ks.erb",
   $include_kickstart = true,
+  $breed,
+  $os_version,
 ) {
   include ::cobbler
 
   $distro = $title
   $server_ip = $::cobbler::server_ip
   cobblerdistro { $distro :
-    ensure  => present,
-    arch    => $arch,
-    isolink => $isolink,
-    destdir => $::cobbler::distro_path,
-    kernel  => "${::cobbler::distro_path}/${distro}/${kernel}",
-    initrd  => "${::cobbler::distro_path}/${distro}/${initrd}",
-    require => [ Service['cobbler'], Service['httpd'] ],
+    ensure     => present,
+    arch       => $arch,
+    isolink    => $isolink,
+    breed      => $breed,
+    os_version => $os_version,
+    destdir    => $::cobbler::distro_path,
+    kernel     => "${::cobbler::distro_path}/${distro}/${kernel}",
+    initrd     => "${::cobbler::distro_path}/${distro}/${initrd}",
+    require    => [ Service['cobbler'], Service['httpd'] ],
   }
   $defaultrootpw = $::cobbler::defaultrootpw
   $kickstarts_path = $::cobbler::kickstarts_path
