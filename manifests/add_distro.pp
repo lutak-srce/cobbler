@@ -9,8 +9,8 @@ define cobbler::add_distro (
   $initrd            = 'images/pxeboot/initrd.img',
   $ks_template       = "cobbler/${title}.ks.erb",
   $include_kickstart = true,
-  $breed,
-  $os_version,
+  $breed             = undef,
+  $os_version        = undef,
 ) {
   include ::cobbler
 

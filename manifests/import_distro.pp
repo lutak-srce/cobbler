@@ -3,8 +3,8 @@ define cobbler::import_distro (
   $arch,
   $path,
   $available_as,
-  $breed,
-  $os_version,
+  $breed      = undef,
+  $os_version = undef,
 ) {
   include cobbler
   $distro = $title
