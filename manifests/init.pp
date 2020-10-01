@@ -97,7 +97,7 @@ class cobbler (
     mode   => '0755',
   }
 
-  file { '/var/lib/cobbler/kickstarts':
+  file { $kickstarts_path:
     ensure => directory,
     path   => $kickstarts_path,
     mode   => '0755',
@@ -171,6 +171,13 @@ class cobbler (
   # logrotate script
   file { '/etc/logrotate.d/cobblerd':
     source => 'puppet:///modules/cobbler/logrotate',
+  }
+
+  # patch for missing scripts
+  file { '/var/lib/cobbler/autoinstall_scripts':
+    ensure  => link,
+    target  => '/var/lib/cobbler/scripts',
+    replace => 'no',
   }
 }
 # vi:nowrap:
