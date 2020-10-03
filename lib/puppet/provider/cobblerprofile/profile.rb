@@ -65,7 +65,7 @@ Puppet::Type.type(:cobblerprofile).provide(:profile) do
     def kickstart=(value)
       if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
         cobbler('profile', 'edit', '--name=' + @resource[:name], '--autoinstall=' + value)
-      else 
+      else
 	cobbler('profile', 'edit', '--name=' + @resource[:name], '--kickstart=' + value)
       end
       @property_hash[:kickstart]=(value)

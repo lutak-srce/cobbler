@@ -30,7 +30,7 @@ class cobbler (
   $syslinux_package        = $::cobbler::params::syslinux_package,
   $defaultrootpw           = 'bettergenerateityourself',
   $apache_service          = $::cobbler::params::apache_service,
-  $http_config_template    = $::cobbler::params::http_config_template, 
+  $http_config_template    = $::cobbler::params::http_config_template,
   $file_proxy_cobbler_erb  = 'cobbler/proxy_cobbler.conf.erb',
   $allow_access            = "${server_ip} ${::ipaddress} 127.0.0.1",
   $purge_distro            = false,

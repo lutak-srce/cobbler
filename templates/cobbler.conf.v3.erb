@@ -12,7 +12,7 @@ Alias /images /var/lib/tftpboot/grub/images
 WSGIScriptAliasMatch ^/cblr/svc/([^/]*) <%= @webroot -%>/svc/services.py
 
 <Directory "<%= @webroot %>">
-    SetEnv VIRTUALENV 
+    SetEnv VIRTUALENV
     Options Indexes FollowSymLinks
     Require all granted
 </Directory>
