@@ -63,7 +63,11 @@ Puppet::Type.type(:cobblerprofile).provide(:profile) do
 
     # sets kickstart
     def kickstart=(value)
-      cobbler('profile', 'edit', '--name=' + @resource[:name], '--kickstart=' + value)
+      if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
+        cobbler('profile', 'edit', '--name=' + @resource[:name], '--autoinstall=' + value)
+      else
+	cobbler('profile', 'edit', '--name=' + @resource[:name], '--kickstart=' + value)
+      end
       @property_hash[:kickstart]=(value)
     end
 
@@ -86,7 +90,11 @@ Puppet::Type.type(:cobblerprofile).provide(:profile) do
           kopts_value << "#{key}=#{val}" unless val=="~"
         end
       end
-      cobblerargs << ('--kopts=' + kopts_value * ' ')
+      if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
+        cobblerargs << ('--kernel-options=' + kopts_value * ' ')
+      else
+	cobblerargs << ('--kopts=' + kopts_value * ' ')
+      end
     # finally run command to set value
     cobbler(cobblerargs)
     # update property_hash
