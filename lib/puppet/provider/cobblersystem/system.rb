@@ -154,7 +154,11 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
         kopts_value << "#{key}=#{val}" unless val=="~"
       end
     end
-    cobblerargs << ('--kopts=' + kopts_value * ' ')
+    if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
+      cobblerargs << ('--kernel-options=' + kopts_value * ' ')
+    else
+      cobblerargs << ('--kopts=' + kopts_value * ' ')
+    end
     # finally run command to set value
     cobbler(cobblerargs)
     # update property_hash
