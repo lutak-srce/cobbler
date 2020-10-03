@@ -174,10 +174,13 @@ class cobbler (
   }
 
   # patch for missing scripts
-  file { '/var/lib/cobbler/autoinstall_scripts':
-    ensure  => link,
-    target  => '/var/lib/cobbler/scripts',
-    replace => 'no',
+  # see https://github.com/cobbler/cobbler/issues/2251
+  if (versioncmp($cobbler_version,'3.0.0')>=0) {
+    file { '/var/lib/cobbler/autoinstall_scripts':
+      ensure  => link,
+      target  => '/var/lib/cobbler/scripts',
+      replace => 'no',
+    }
   }
 }
 # vi:nowrap:
