@@ -1,3 +1,4 @@
+require 'xmlrpc'
 require 'xmlrpc/client'
 require 'fileutils'
 

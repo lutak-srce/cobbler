@@ -1,3 +1,4 @@
+require 'xmlrpc'
 require 'xmlrpc/client'
 
 Puppet::Type.type(:cobblersystem).provide(:system) do
