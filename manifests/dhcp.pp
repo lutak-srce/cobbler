@@ -42,8 +42,6 @@ class cobbler::dhcp (
     }
   }
 
-
-
   file { '/etc/cobbler/dhcp.template':
     ensure  => present,
     owner   => root,
