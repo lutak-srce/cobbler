@@ -15,7 +15,7 @@ class cobbler::dhcp (
 
   include cobbler
 
-  if ($facts[os][name] == 'CentOS') and versioncmp($facts['os']['release']['major'], '8') >= 0 {
+  if ($facts[os][name] == 'CentOS') and versioncmp($facts['os']['release']['major'], '8') == 0 {
     package { 'dhcp-server': name => $package, }
 
     service { 'dhcpd':
