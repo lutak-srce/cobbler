@@ -18,30 +18,39 @@ class cobbler::dhcp (
   if ($facts[os][name] == 'CentOS') and versioncmp($facts['os']['release']['major'], '8') == 0 {
     package { 'dhcp-server': name => $package, }
 
-    service { 'dhcpd':
-      ensure  => running,
-      name    => $service,
-      require => [
-        File['/etc/cobbler/dhcp.template'],
-        Package['dhcp-server'],
-        Exec['cobblersync'],
-      ],
-    }
+    # service { 'dhcpd':
+    #   ensure  => running,
+    #   name    => $service,
+    #   require => [
+    #     File['/etc/cobbler/dhcp.template'],
+    #     Package['dhcp-server'],
+    #     Exec['cobblersync'],
+    #   ],
+    # }
   }
   else {
     package { 'dhcp': name => $package, }
 
+    # service { 'dhcpd':
+    #   ensure  => running,
+    #   name    => $service,
+    #   require => [
+    #     File['/etc/cobbler/dhcp.template'],
+    #     Package['dhcp'],
+    #     Exec['cobblersync'],
+    #   ],
+    # }
+  }
+
     service { 'dhcpd':
       ensure  => running,
       name    => $service,
       require => [
         File['/etc/cobbler/dhcp.template'],
-        Package['dhcp'],
+        Package[$package],
         Exec['cobblersync'],
       ],
     }
-  }
-
 
 
   file { '/etc/cobbler/dhcp.template':
