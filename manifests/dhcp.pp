@@ -12,24 +12,37 @@ class cobbler::dhcp (
   $subnets         = undef,
   $dynamic_range   = false,
 ) inherits cobbler::params {
-  include ::cobbler
+
+  include cobbler
 
   if ($facts[os][name] == 'CentOS') and versioncmp($facts['os']['release']['major'], '8') >= 0 {
     package { 'dhcp-server': name => $package, }
+
+    service { 'dhcpd':
+      ensure  => running,
+      name    => $service,
+      require => [
+        File['/etc/cobbler/dhcp.template'],
+        Package['dhcp-server'],
+        Exec['cobblersync'],
+      ],
+    }
   }
   else {
     package { 'dhcp': name => $package, }
+
+    service { 'dhcpd':
+      ensure  => running,
+      name    => $service,
+      require => [
+        File['/etc/cobbler/dhcp.template'],
+        Package['dhcp'],
+        Exec['cobblersync'],
+      ],
+    }
   }
 
-  service { 'dhcpd':
-    ensure  => running,
-    name    => $service,
-    require => [
-      File['/etc/cobbler/dhcp.template'],
-      #Package['dhcp'],
-      Exec['cobblersync'],
-    ],
-  }
+
 
   file { '/etc/cobbler/dhcp.template':
     ensure  => present,
