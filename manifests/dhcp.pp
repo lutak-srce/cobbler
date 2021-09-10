@@ -15,19 +15,17 @@ class cobbler::dhcp (
 
   include cobbler
 
-    package { 'dhcp': name => $package, }
+  package { 'dhcp': name => $package, }
 
-    service { 'dhcpd':
-      ensure  => running,
-      name    => $service,
-      require => [
-        File['/etc/cobbler/dhcp.template'],
-        Package['dhcp'],
-        Exec['cobblersync'],
-      ],
-    }
-
-
+  service { 'dhcpd':
+    ensure  => running,
+    name    => $service,
+    require => [
+      File['/etc/cobbler/dhcp.template'],
+      Package['dhcp'],
+      Exec['cobblersync'],
+    ],
+  }
 
   file { '/etc/cobbler/dhcp.template':
     ensure  => present,
