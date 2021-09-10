@@ -125,7 +125,35 @@ class cobbler (
     require     => [ Service['cobbler'], Service['httpd'] ],
   }
 
+  # resource defaults
+  resources { 'cobblerdistro':
+    purge   => $purge_distro,
+    require => [ Service['cobbler'], Service['httpd'] ],
+    noop    => $noops,
+  }
+  resources { 'cobblerrepo':
+    purge   => $purge_repo,
+    require => [ Service['cobbler'], Service['httpd'] ],
+    noop    => $noops,
+  }
+  resources { 'cobblerprofile':
+    purge   => $purge_profile,
+    require => [ Service['cobbler'], Service['httpd'] ],
+    noop    => $noops,
+  }
+  resources { 'cobblersystem':
+    purge   => $purge_system,
+    require => [ Service['cobbler'], Service['httpd'] ],
+    noop    => $noops,
+  }
 
+  # create resources from hiera
+  if $create_resources {
+    create_resources(cobblerdistro,  hiera_hash('cobbler::distros',  {}) )
+    create_resources(cobblerrepo,    hiera_hash('cobbler::repos',    {}) )
+    create_resources(cobblerprofile, hiera_hash('cobbler::profiles', {}) )
+    create_resources(cobblersystem,  hiera_hash('cobbler::systems',  {}) )
+  }
 
   # include ISC DHCP only if we choose manage_dhcp
   if ( $manage_dhcp == '1' ) and ( $dhcp_option =~ /isc/ ) {
