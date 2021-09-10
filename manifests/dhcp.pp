@@ -26,7 +26,7 @@ class cobbler::dhcp (
     name    => $service,
     require => [
       File['/etc/cobbler/dhcp.template'],
-      Package['dhcp'],
+      #Package['dhcp'],
       Exec['cobblersync'],
     ],
   }
