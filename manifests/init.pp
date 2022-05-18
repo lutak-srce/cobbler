@@ -49,6 +49,7 @@ class cobbler (
   $client_use_https        = '0',
   $authorization_module    = 'authz_allowall',
   $settings_template       = $::cobbler::params::settings_template,
+  $settings_file           = '/etc/cobbler/settings',
 ) inherits cobbler::params {
 
   # include dependencies
@@ -103,7 +104,7 @@ class cobbler (
     mode   => '0755',
   }
 
-  file { '/etc/cobbler/settings':
+  file { $settings_file:
     content => template($settings_template),
     require => Package['cobbler'],
     notify  => Service['cobbler'],
