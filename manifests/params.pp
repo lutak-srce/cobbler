@@ -2,7 +2,7 @@
 # = Class: cobbler::params
 #
 class cobbler::params {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $service_name           = 'cobblerd'
       $package_name           = 'cobbler'
@@ -34,7 +34,7 @@ class cobbler::params {
       $default_kickstart   = '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat")
+      fail("Unsupported osfamily: ${facts['os']['family']} operatingsystem: ${facts['os']['name']}, module ${module_name} currently only supports osfamily RedHat")
     }
   }
 
