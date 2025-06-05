@@ -12,7 +12,8 @@ class cobbler::dhcp (
   $subnets         = undef,
   $dynamic_range   = false,
 ) inherits cobbler::params {
-  include ::cobbler
+
+  include cobbler
 
   package { 'dhcp': name => $package, }
 
