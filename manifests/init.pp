@@ -157,7 +157,7 @@ class cobbler (
   }
 
   # include ISC DHCP only if we choose manage_dhcp
-  if ( $manage_dhcp == '1' ) and ( $dhcp_option =~ /isc/ ) {
+  if ( $manage_dhcp == '1' or $manage_dhcp ) and ( $dhcp_option =~ /isc/ ) {
     class { '::cobbler::dhcp':
       package       => $dhcp_package,
       service       => $dhcp_service,
