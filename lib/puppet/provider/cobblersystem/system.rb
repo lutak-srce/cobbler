@@ -35,7 +35,7 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
         :kernel_options   => member['kernel_options'],
         :hostname         => member['hostname'],
         :gateway          => member['gateway'],
-        :netboot          => member['netboot_enabled'].to_s,
+        :netboot          => member['netboot_enabled'],
         :comment          => member['comment'],
         :power_type       => member['power_type'],
         :virt_auto_boot   => member['virt_auto_boot'].to_s.sub(/^1$/,'true').sub(/^0$/,'false'),
@@ -78,8 +78,7 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
 
   # sets netboot
   def netboot=(value)
-    tmparg='--netboot=' + if value.to_s =~ /false/i then '0' else  '1' end
-    cobbler('system', 'edit', '--name=' + @resource[:name], tmparg)
+    cobbler('system', 'edit', '--name=' + @resource[:name], '--netboot-enabled=' + value)
     @property_hash[:netboot]=(value)
   end
 
@@ -154,7 +153,11 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
         kopts_value << "#{key}=#{val}" unless val=="~"
       end
     end
-    cobblerargs << ('--kopts=' + kopts_value * ' ')
+    if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
+      cobblerargs << ('--kernel-options=' + kopts_value * ' ')
+    else
+      cobblerargs << ('--kopts=' + kopts_value * ' ')
+    end
     # finally run command to set value
     cobbler(cobblerargs)
     # update property_hash

@@ -10,26 +10,27 @@ class cobbler (
   $next_server_ip          = $facts['networking']['ip'],
   $nameservers             = [ '8.8.8.8', '8.8.4.4' ],
   $puppet_auto_setup       = 0,
-  $puppetca_path           = '/opt/puppetlabs/bin/puppet',
+  $puppetca_path           = $::cobbler::params::puppetca_path,
   $sign_puppet_certs       = 0,
   $remove_old_puppet_certs = 0,
   $manage_dhcp             = '1',
-  $dhcp_option             = 'isc',
+  $dhcp_option             = 'manage_isc',
   $dhcp_package            = $::cobbler::params::dhcp_package,
   $dhcp_service            = $::cobbler::params::dhcp_service,
-  $dhcp_template           = 'cobbler/dhcp.template.erb',
+  $dhcp_template           = $::cobbler::params::dhcp_template,
   $dhcp_interfaces         = [ 'eth0' ],
   $dhcp_subnets            = [],
   $dhcp_nameservers        = [ '8.8.8.8', '8.8.4.4' ],
   $dhcp_dynamic_range      = false,
   $manage_dns              = '0',
-  $dns_option              = 'dnsmasq',
+  $dns_option              = 'manage_dnsmasq',
   $manage_tftpd            = '1',
   $tftpd_package           = $::cobbler::params::tftpd_package,
-  $tftpd_option            = 'in_tftpd',
+  $tftpd_option            = 'manage_in_tftpd',
   $syslinux_package        = $::cobbler::params::syslinux_package,
   $defaultrootpw           = 'bettergenerateityourself',
   $apache_service          = $::cobbler::params::apache_service,
+  $http_config_template    = $::cobbler::params::http_config_template,
   $file_proxy_cobbler_erb  = 'cobbler/proxy_cobbler.conf.erb',
   $allow_access            = "${server_ip} ${facts['networking']['ip']} 127.0.0.1",
   $purge_distro            = false,
@@ -37,14 +38,18 @@ class cobbler (
   $purge_profile           = false,
   $purge_system            = false,
   $default_kickstart       = $::cobbler::params::default_kickstart,
-  $kickstarts_path         = '/var/lib/cobbler/kickstarts',
+  $kickstarts_path         = $::cobbler::params::kickstarts_path,
   $webroot                 = '/var/www/cobbler',
   $auth_module             = 'authn_denyall',
+  $hash_algorithm          = undef,
   $create_resources        = false,
   $dependency_class        = '::cobbler::dependency',
   $my_class                = undef,
   $noops                   = undef,
-  $client_use_https        = '0'
+  $client_use_https        = '0',
+  $authorization_module    = 'authz_allowall',
+  $settings_template       = $::cobbler::params::settings_template,
+  $settings_file           = '/etc/cobbler/settings',
 ) inherits cobbler::params {
 
   # include dependencies
@@ -93,14 +98,14 @@ class cobbler (
     mode   => '0755',
   }
 
-  file { '/var/lib/cobbler/kickstarts':
+  file { $kickstarts_path:
     ensure => directory,
     path   => $kickstarts_path,
     mode   => '0755',
   }
 
-  file { '/etc/cobbler/settings':
-    content => template('cobbler/settings.erb'),
+  file { $settings_file:
+    content => template($settings_template),
     require => Package['cobbler'],
     notify  => Service['cobbler'],
   }
@@ -112,7 +117,7 @@ class cobbler (
   }
 
   file { "${::cobbler::params::http_config_prefix}/distros.conf": content => template('cobbler/distros.conf.erb'), }
-  file { "${::cobbler::params::http_config_prefix}/cobbler.conf": content => template('cobbler/cobbler.conf.erb'), }
+  file { "${::cobbler::params::http_config_prefix}/cobbler.conf": content => template($http_config_template), }
 
   # cobbler sync command
   exec { 'cobblersync':
@@ -152,7 +157,7 @@ class cobbler (
   }
 
   # include ISC DHCP only if we choose manage_dhcp
-  if ( $manage_dhcp == '1' ) and ( $dhcp_option == 'isc' ) {
+  if ( $manage_dhcp == '1' or $manage_dhcp ) and ( $dhcp_option =~ /isc/ ) {
     class { '::cobbler::dhcp':
       package       => $dhcp_package,
       service       => $dhcp_service,
@@ -167,6 +172,16 @@ class cobbler (
   # logrotate script
   file { '/etc/logrotate.d/cobblerd':
     source => 'puppet:///modules/cobbler/logrotate',
+  }
+
+  # patch for missing scripts
+  # see https://github.com/cobbler/cobbler/issues/2251
+  if (versioncmp($::cobbler_version,'3.0.0')>=0) {
+    file { '/var/lib/cobbler/autoinstall_scripts':
+      ensure  => link,
+      target  => '/var/lib/cobbler/scripts',
+      replace => 'no',
+    }
   }
 }
 # vi:nowrap:

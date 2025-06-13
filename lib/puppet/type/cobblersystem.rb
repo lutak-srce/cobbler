@@ -65,7 +65,11 @@ cobblersystem { 'test.domain.com':
           is_value['mac'] = is_value.delete 'mac_address' if (is_value.has_key?('mac_address') and should[is_key].has_key?('mac'))
           # check every key in puppet manifest, leave the rest
           should[is_key].keys.uniq.each do |key|
-            return false if should[is_key][key].to_s != is_value[key].to_s
+            if key == 'mac' or key == 'mac_address'
+              return false if should[is_key][key].to_s.downcase != is_value[key].to_s.downcase
+            else
+              return false if should[is_key][key].to_s != is_value[key].to_s
+            end
           end
         end
       end
@@ -74,7 +78,11 @@ cobblersystem { 'test.domain.com':
         if v.is_a?(Hash)
           v.each do |l, w|
             unless is[k][l].nil? 
-               return false unless is[k][l].to_s == w.to_s
+              if l == 'mac' or l == 'mac_address'
+                return false unless is[k][l].to_s.downcase == w.to_s.downcase
+              else
+                return false unless is[k][l].to_s == w.to_s
+              end
             end
           end 
         end 

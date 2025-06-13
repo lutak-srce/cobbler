@@ -82,7 +82,12 @@ Puppet::Type.type(:cobblerdistro).provide(:distro) do
         ksmeta_value << "#{key}=#{val}" unless val=="~"
       end
     end
-    cobblerargs << ('--ksmeta=' + ksmeta_value * ' ')
+    if Puppet::Util::Package.versioncmp(Facter.value(:cobbler_version), '3.0.0') >= 0
+      cobblerargs << ('--autoinstall-meta=' + ksmeta_value * ' ')
+    else
+      cobblerargs << ('--ksmeta=' + ksmeta_value * ' ')
+    end
+
     # finally run command to set value
     cobbler(cobblerargs)
     # update property_hash
