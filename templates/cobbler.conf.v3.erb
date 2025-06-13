@@ -1,5 +1,14 @@
 # This configuration file allows cobbler data
 # to be accessed over HTTP.
+<IfModule !wsgi_module>
+    LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi_python3.so
+</IfModule>
+<IfModule !proxy_module>
+    LoadModule proxy_module /usr/lib64/httpd/modules/mod_proxy.so
+</IfModule>
+<IfModule !proxy_http_module>
+    LoadModule proxy_http_module /usr/lib64/httpd/modules/mod_proxy_http.so
+</IfModule>
 
 AliasMatch ^/cblr(?!/svc/)(.*)?$ "<%= @webroot %>$1"
 AliasMatch ^/cobbler_track(.*)?$ "<%= @webroot %>$1"
@@ -11,6 +20,8 @@ Alias /images /var/lib/tftpboot/grub/images
 
 WSGIScriptAliasMatch ^/cblr/svc/([^/]*) <%= @webroot -%>/svc/services.py
 
+<VirtualHost *:80>
+
 <Directory "<%= @webroot %>">
     SetEnv VIRTUALENV
     Options Indexes FollowSymLinks
@@ -20,6 +31,7 @@ WSGIScriptAliasMatch ^/cblr/svc/([^/]*) <%= @webroot -%>/svc/services.py
 <Directory /var/lib/tftpboot/grub>
         Options Indexes FollowSymLinks
         AllowOverride None
+        AuthType None
         Require all granted
 </Directory>
 
@@ -30,15 +42,8 @@ ProxyPassReverse /cobbler_api http://localhost:25151/
 
 BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
 
-# the webui is now part of the "cobbler-web" package
-# and is visited at http://.../cobbler_web not this URL.
-# this is only a pointer to the new page.
-
-<Directory "<%= @webroot %>/web/">
-    Options Indexes FollowSymLinks
-    Require all granted
-</Directory>
-
 <Location /cblr>
     Require all granted
 </Location>
+
+</VirtualHost>
