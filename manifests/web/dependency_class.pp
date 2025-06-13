@@ -5,6 +5,6 @@
 class cobbler::web::dependency_class {
 
   # require apache modules
-  include ::apache::mod::ssl
+  # include ::apache::mod::ssl
 
 }
