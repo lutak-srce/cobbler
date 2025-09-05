@@ -145,10 +145,10 @@ class cobbler (
 
   # create resources from hiera
   if $create_resources {
-    create_resources(cobblerdistro,  hiera_hash('cobbler::distros',  {}) )
-    create_resources(cobblerrepo,    hiera_hash('cobbler::repos',    {}) )
-    create_resources(cobblerprofile, hiera_hash('cobbler::profiles', {}) )
-    create_resources(cobblersystem,  hiera_hash('cobbler::systems',  {}) )
+    create_resources( cobblerdistro, lookup( 'cobbler::distros', Hash, {'strategy' => 'deep', 'merge_hash_arrays' => true}, {}))
+    create_resources( cobblerrepo, lookup( 'cobbler::repos', Hash, {'strategy' => 'deep', 'merge_hash_arrays' => true}, {}))
+    create_resources( cobblerprofile, lookup( 'cobbler::profiles', Hash, {'strategy' => 'deep', 'merge_hash_arrays' => true}, {}))
+    create_resources( cobblersystem, lookup( 'cobbler::systems', Hash, {'strategy' => 'deep', 'merge_hash_arrays' => true}, {}))
   }
 
   # include ISC DHCP only if we choose manage_dhcp
